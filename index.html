@@ -1,0 +1,2646 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>キープオンスクール - ロボットプログラミングをきっかけに学びを広げる"居場所"</title>
+    
+    <!-- External Libraries -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/countup.js@2.0.7/dist/countUp.min.js"></script>
+    <script src="https://unpkg.com/vanilla-tilt@1.8.0/dist/vanilla-tilt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans JP", sans-serif;
+        line-height: 1.6;
+        color: #333;
+        overflow-x: hidden;
+    }
+    
+    /* カラー変数 */
+    :root {
+        --primary-blue: #00BCD4; /* 水色メイン */
+        --light-blue: #B2EBF2;
+        --secondary-orange: #FF9800; /* オレンジ差し色 */
+        --accent-orange: #FFB74D;
+        --accent-yellow: #FFC107;
+        --accent-green: #4CAF50;
+        --accent-pink: #FF6B6B;
+        --dark-brown: #2C1810;
+        --light-bg: #F0F8FF;
+        --white: #FFFFFF;
+        --gray-text: #666;
+    }
+    
+    /* ヘッダー */
+    header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        padding: 15px 0;
+        transition: top 0.3s ease-in-out, padding 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .header-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .logo {
+        width: 150px;
+        height: auto;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+    
+    .logo:hover {
+        transform: scale(1.05);
+    }
+    
+    .cta-header {
+        background: linear-gradient(135deg, var(--primary-blue), var(--secondary-orange));
+        color: white;
+        padding: 12px 30px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .cta-header:before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+    
+    .cta-header:hover:before {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .cta-header:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 188, 212, 0.4);
+    }
+    
+    /* ヒーローセクション */
+    .hero {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #E0F2F1 0%, #FFF3E0 100%);
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        padding-top: 100px;
+    }
+    
+    .hero-container {
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 20px;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .hero-content {
+        max-width: 700px;
+    }
+    
+    .hero-title {
+        font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+        font-weight: 900;
+        color: var(--dark-brown);
+        margin-bottom: 20px;
+        line-height: 1.2;
+        position: relative;
+        text-align: left;
+    }
+    
+    .hero-title span {
+        background: linear-gradient(135deg, var(--primary-blue), var(--secondary-orange));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .emphasis-text {
+        background: linear-gradient(135deg, var(--secondary-orange), var(--accent-yellow));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 900;
+        font-size: 1.3em;
+        position: relative;
+        display: inline-block;
+    }
+
+    .emphasis-text::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(to right, var(--secondary-orange), var(--accent-yellow));
+        border-radius: 2px;
+        animation: emphasize-glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes emphasize-glow {
+        0% { opacity: 0.7; transform: scaleX(0.8); }
+        100% { opacity: 1; transform: scaleX(1); }
+    }
+    
+    .hero-subtitle {
+        font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+        color: var(--dark-brown);
+        margin-bottom: 30px;
+        font-weight: 500;
+        text-align: left;
+    }
+    
+    .hero-description {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 40px;
+        line-height: 1.8;
+        text-align: left;
+    }
+
+    .hero-video {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    .hero-video iframe {
+        width: 100%;
+        max-width: 560px;
+        height: 315px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+    }
+
+    .hero-video iframe:hover {
+        transform: scale(1.05);
+    }
+    
+    .cta-group {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .cta-primary {
+        background: linear-gradient(135deg, var(--secondary-orange), var(--accent-orange));
+        color: white;
+        padding: 18px 40px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(255, 152, 0, 0.3);
+        display: inline-block;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .cta-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(255, 152, 0, 0.4);
+    }
+    
+    /* アニメーション要素 */
+    .floating-shapes {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+    
+    .shape {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.15;
+        filter: blur(1px);
+    }
+    
+    .shape1 {
+        width: 300px;
+        height: 300px;
+        background: linear-gradient(45deg, var(--primary-blue), var(--secondary-orange));
+        top: 10%;
+        right: -150px;
+        animation: float1 25s infinite ease-in-out;
+    }
+    
+    .shape2 {
+        width: 200px;
+        height: 200px;
+        background: linear-gradient(135deg, var(--accent-yellow), var(--accent-green));
+        bottom: 20%;
+        left: -100px;
+        animation: float2 20s infinite ease-in-out reverse;
+    }
+    
+    .shape3 {
+        width: 150px;
+        height: 150px;
+        background: linear-gradient(225deg, var(--accent-green), var(--primary-blue));
+        top: 50%;
+        right: 10%;
+        animation: float3 30s infinite ease-in-out;
+    }
+    
+    .shape4 {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(315deg, var(--secondary-orange), var(--accent-yellow));
+        top: 30%;
+        left: 5%;
+        animation: float4 18s infinite ease-in-out;
+    }
+    
+    .shape5 {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(90deg, var(--primary-blue), var(--accent-pink));
+        bottom: 40%;
+        right: 30%;
+        animation: float5 22s infinite ease-in-out;
+    }
+    
+    @keyframes float1 {
+        0%, 100% {
+            transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+        }
+        25% {
+            transform: translateY(-50px) translateX(30px) rotate(90deg) scale(1.1);
+        }
+        50% {
+            transform: translateY(-20px) translateX(-40px) rotate(180deg) scale(0.9);
+        }
+        75% {
+            transform: translateY(40px) translateX(20px) rotate(270deg) scale(1.05);
+        }
+    }
+    
+    @keyframes float2 {
+        0%, 100% {
+            transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+        }
+        33% {
+            transform: translateY(-40px) translateX(-30px) rotate(120deg) scale(1.2);
+        }
+        66% {
+            transform: translateY(30px) translateX(50px) rotate(240deg) scale(0.8);
+        }
+    }
+    
+    @keyframes float3 {
+        0%, 100% {
+            transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+        }
+        20% {
+            transform: translateY(-30px) translateX(-20px) rotate(72deg) scale(1.1);
+        }
+        40% {
+            transform: translateY(20px) translateX(30px) rotate(144deg) scale(0.9);
+        }
+        60% {
+            transform: translateY(-10px) translateX(-40px) rotate(216deg) scale(1.15);
+        }
+        80% {
+            transform: translateY(35px) translateX(15px) rotate(288deg) scale(0.85);
+        }
+    }
+    
+    @keyframes float4 {
+        0%, 100% {
+            transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+        }
+        50% {
+            transform: translateY(-60px) translateX(80px) rotate(180deg) scale(1.3);
+        }
+    }
+    
+    @keyframes float5 {
+        0%, 100% {
+            transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+        }
+        25% {
+            transform: translateY(25px) translateX(-35px) rotate(90deg) scale(0.7);
+        }
+        50% {
+            transform: translateY(-35px) translateX(25px) rotate(180deg) scale(1.4);
+        }
+        75% {
+            transform: translateY(15px) translateX(-15px) rotate(270deg) scale(0.9);
+        }
+    }
+    
+    /* 教育課題セクション */
+    .education-challenge {
+        padding: 60px 0;
+        background: white;
+        position: relative;
+    }
+    
+    .challenge-content {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .challenge-text {
+        text-align: center;
+        margin: 30px 0;
+        font-size: 1.2rem;
+        line-height: 1.8;
+        color: var(--gray-text);
+    }
+    
+    .challenge-text strong {
+        color: var(--primary-blue);
+        font-size: 1.3rem;
+    }
+    
+    .problem-statement, .solution-statement {
+        margin: 40px 0;
+        padding: 35px;
+        background: var(--light-bg);
+        border-radius: 20px;
+        text-align: left;
+    }
+    
+    .problem-statement h3, .solution-statement h3 {
+        color: var(--dark-brown);
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .problem-statement p, .solution-statement p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: var(--gray-text);
+        text-align: center;
+    }
+
+    /* データビジュアライゼーション */
+    .data-visualization {
+        margin: 40px 0;
+        text-align: center;
+    }
+    
+    .chart-container {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        margin: 20px 0;
+    }
+    
+    .chart-container h4 {
+        color: var(--dark-brown);
+        margin-bottom: 30px;
+        font-size: 1.3rem;
+    }
+    
+    .chart {
+        display: flex;
+        justify-content: center;
+        align-items: end;
+        gap: 40px;
+        height: 200px;
+        margin: 20px 0;
+    }
+    
+    .chart-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .chart-bar {
+        width: 60px;
+        background: linear-gradient(to top, var(--primary-blue), var(--light-blue));
+        border-radius: 8px 8px 0 0;
+        position: relative;
+        display: flex;
+        align-items: end;
+        justify-content: center;
+        min-height: 20px;
+        animation: grow-up 1.5s ease-out;
+    }
+    
+    @keyframes grow-up {
+        from { height: 0; }
+        to { height: 100%; }
+    }
+    
+    .chart-value {
+        color: white;
+        font-weight: bold;
+        padding: 5px;
+        font-size: 1.1rem;
+    }
+    
+    .chart-label {
+        font-size: 0.9rem;
+        color: var(--gray-text);
+        text-align: center;
+        font-weight: 500;
+    }
+
+    /* データ画像コンテナ */
+    .data-image-container, .trend-image-container {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        margin: 20px 0;
+        text-align: center;
+    }
+    
+    .data-image-container h4, .trend-image-container h3 {
+        color: var(--dark-brown);
+        margin-bottom: 20px;
+        font-size: 1.3rem;
+    }
+    
+    .data-image, .trend-image {
+        width: 100%;
+        max-width: 800px;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+    
+    .data-image:hover, .trend-image:hover {
+        transform: scale(1.02);
+    }
+
+    /* イベントギャラリー */
+    .event-gallery {
+        margin: 40px 0;
+        text-align: center;
+    }
+    
+    .event-gallery h4 {
+        color: var(--dark-brown);
+        margin-bottom: 30px;
+        font-size: 1.3rem;
+    }
+    
+    .single-event-image {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+    }
+    
+    .event-image {
+        width: 100%;
+        max-width: 600px;
+        height: auto;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease;
+    }
+    
+    .event-image:hover {
+        transform: translateY(-5px) scale(1.02);
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    .section-title {
+        font-size: clamp(2rem, 4vw, 3rem);
+        text-align: center;
+        color: var(--dark-brown);
+        margin-bottom: 50px;
+        position: relative;
+    }
+    
+    .section-title:after {
+        content: '';
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(to right, var(--primary-blue), var(--accent-green));
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 2px;
+    }
+    
+    .problem-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 50px;
+    }
+    
+    .problem-item {
+        background: var(--light-bg);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .problem-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+    
+    .problem-item:before {
+        content: '✓';
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 24px;
+        color: var(--accent-green);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .problem-item:hover:before {
+        opacity: 1;
+    }
+    
+    .problem-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+    }
+    
+    .problem-text {
+        font-size: 1.1rem;
+        color: #666;
+        line-height: 1.6;
+        text-align: left;
+    }
+    
+    /* 社会ニーズセクション */
+    .social-needs {
+        padding: 60px 0;
+        background: linear-gradient(135deg, #E0F2F1 0%, #FFF3E0 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .needs-content {
+        max-width: 1000px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    
+    .needs-text {
+        margin: 40px 0;
+        font-size: 1.2rem;
+        line-height: 1.8;
+        color: var(--gray-text);
+    }
+    
+    .trends-data {
+        margin: 40px 0;
+    }
+    
+    .trend-chart-container {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .trend-chart-container h3 {
+        color: var(--dark-brown);
+        margin-bottom: 40px;
+        font-size: 1.8rem;
+    }
+    
+    .trends-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-top: 30px;
+    }
+    
+    .trend-item {
+        background: var(--light-bg);
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        transition: transform 0.3s ease;
+        border: 3px solid transparent;
+    }
+    
+    .trend-item:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary-blue);
+    }
+    
+    .trend-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+    }
+    
+    .trend-item h4 {
+        color: var(--dark-brown);
+        margin-bottom: 20px;
+        font-size: 1.3rem;
+    }
+    
+    .trend-stat {
+        margin: 20px 0;
+    }
+    
+    .stat-number {
+        display: block;
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: var(--primary-blue);
+        line-height: 1;
+    }
+    
+    .stat-label {
+        font-size: 1rem;
+        color: var(--secondary-orange);
+        font-weight: bold;
+    }
+    
+    .trend-item p {
+        font-size: 0.95rem;
+        color: var(--gray-text);
+        line-height: 1.6;
+    }
+    
+    .philosophy-statement {
+        margin: 40px 0;
+        padding: 35px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .philosophy-statement h3 {
+        color: var(--dark-brown);
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+    
+    .philosophy-statement p {
+        font-size: 1.2rem;
+        line-height: 1.8;
+        color: var(--gray-text);
+    }
+    
+    .philosophy-statement strong {
+        color: var(--primary-blue);
+        font-size: 1.3rem;
+    }
+    
+    .concept-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+        margin-top: 50px;
+    }
+    
+    .concept-text h3 {
+        font-size: 2rem;
+        color: var(--dark-brown);
+        margin-bottom: 20px;
+        text-align: left;
+    }
+    
+    .concept-text p {
+        font-size: 1.1rem;
+        color: #666;
+        line-height: 1.8;
+        margin-bottom: 20px;
+        text-align: left;
+    }
+    
+    .highlight {
+        background: linear-gradient(to bottom, transparent 50%, rgba(93, 173, 226, 0.3) 50%);
+        padding: 2px 8px;
+        border-radius: 4px;
+    }
+    
+    .concept-image {
+        position: relative;
+        text-align: center;
+    }
+    
+    .concept-image-placeholder {
+        width: 100%;
+        height: 400px;
+        background: linear-gradient(135deg, var(--primary-blue), var(--accent-green));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(93, 173, 226, 0.3);
+    }
+    
+    .concept-image-placeholder:before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transform: rotate(45deg);
+        animation: shine 3s infinite;
+    }
+    
+    @keyframes shine {
+        0% {
+            transform: translateX(-100%) translateY(-100%) rotate(45deg);
+        }
+        100% {
+            transform: translateX(100%) translateY(100%) rotate(45deg);
+        }
+    }
+    
+    /* 活動紹介セクション */
+    .activities {
+        padding: 60px 0;
+        background: white;
+        position: relative;
+    }
+    
+    .activities-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin-top: 40px;
+    }
+    
+    .activity-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        border: 2px solid transparent;
+    }
+    
+    .activity-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        border-color: var(--primary-blue);
+    }
+    
+    .activity-header {
+        padding: 30px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .activity-header1 {
+        background: linear-gradient(135deg, var(--primary-blue), #0097A7);
+    }
+    
+    .activity-header2 {
+        background: linear-gradient(135deg, var(--secondary-orange), #F57C00);
+    }
+    
+    .activity-header3 {
+        background: linear-gradient(135deg, var(--accent-green), #388E3C);
+    }
+    
+    .activity-header4 {
+        background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+    }
+    
+    .activity-header5 {
+        background: linear-gradient(135deg, #E91E63, #C2185B);
+    }
+    
+    .activity-header6 {
+        background: linear-gradient(135deg, #607D8B, #455A64);
+    }
+    
+    .activity-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        display: block;
+    }
+    
+    .activity-title {
+        font-size: 1.4rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-align: left;
+    }
+    
+    .activity-subtitle {
+        font-size: 1rem;
+        opacity: 0.9;
+        line-height: 1.4;
+        text-align: left;
+    }
+    
+    .activity-preview {
+        padding: 25px 30px;
+        background: var(--light-bg);
+    }
+    
+    .activity-preview p {
+        color: var(--gray-text);
+        line-height: 1.6;
+        font-size: 0.95rem;
+        text-align: left;
+    }
+    
+    .more-activities {
+        border: 2px dashed #ddd;
+        background: var(--light-bg);
+    }
+    
+    .more-activities .activity-header6 {
+        background: transparent;
+        color: var(--gray-text);
+    }
+    
+    .cta-section {
+        margin: 50px 0 30px;
+        text-align: center;
+        padding: 40px;
+        background: linear-gradient(135deg, rgba(0, 188, 212, 0.1), rgba(255, 152, 0, 0.1));
+        border-radius: 25px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+        animation: pulse-light 4s ease-in-out infinite;
+    }
+    
+    .cta-section h3 {
+        color: var(--dark-brown);
+        font-size: 2rem;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .cta-section p {
+        color: var(--gray-text);
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 30px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .cta-button-primary {
+        background: linear-gradient(135deg, var(--secondary-orange), var(--accent-orange));
+        color: white;
+        padding: 20px 50px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(255, 152, 0, 0.3);
+        display: inline-block;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .cta-button-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(255, 152, 0, 0.4);
+    }
+
+    /* 3つの柱セクション */
+    .pillars {
+        padding: 80px 0;
+        background: white;
+    }
+    
+    .pillars-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 40px;
+        margin-top: 60px;
+    }
+    
+    .pillar-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+    }
+    
+    .pillar-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+    
+    .pillar-header {
+        padding: 40px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .pillar-header1 {
+        background: linear-gradient(135deg, var(--primary-blue), #3498DB);
+    }
+    
+    .pillar-header2 {
+        background: linear-gradient(135deg, var(--accent-yellow), var(--secondary-orange));
+    }
+    
+    .pillar-header3 {
+        background: linear-gradient(135deg, var(--accent-green), #27AE60);
+    }
+    
+    .pillar-number {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 4rem;
+        font-weight: 900;
+        color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .pillar-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+    }
+    
+    .pillar-title {
+        color: white;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 1;
+        text-align: left;
+    }
+    
+    .pillar-subtitle {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1rem;
+        position: relative;
+        z-index: 1;
+        text-align: left;
+    }
+    
+    .pillar-content {
+        padding: 30px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease;
+    }
+    
+    .pillar-card.active .pillar-content {
+        max-height: 1000px;
+    }
+    
+    .pillar-content h4 {
+        color: var(--dark-brown);
+        margin-bottom: 15px;
+        font-size: 1.2rem;
+        text-align: left;
+    }
+    
+    .pillar-content p {
+        color: #666;
+        line-height: 1.8;
+        margin-bottom: 15px;
+        text-align: left;
+    }
+    
+    .pillar-point {
+        background: var(--light-bg);
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 20px;
+        border-left: 4px solid;
+        text-align: left;
+    }
+    
+    .pillar-card:nth-child(1) .pillar-point {
+        border-left-color: var(--primary-blue);
+    }
+    
+    .pillar-card:nth-child(2) .pillar-point {
+        border-left-color: var(--accent-yellow);
+    }
+    
+    .pillar-card:nth-child(3) .pillar-point {
+        border-left-color: var(--accent-green);
+    }
+    
+    .expand-icon {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .pillar-card.active .expand-icon {
+        transform: rotate(180deg);
+    }
+
+    /* 新セクション: なぜ「正解のない問い」に向き合うことが大切なのか？ */
+    .why-questions {
+        padding: 100px 0;
+        background: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .why-questions::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, var(--primary-blue), transparent);
+        opacity: 0.3;
+    }
+
+    .story-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .story-section {
+        margin-bottom: 80px;
+        position: relative;
+        padding-left: 60px;
+    }
+
+    .story-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .story-marker {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--primary-blue), var(--accent-green));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        box-shadow: 0 4px 15px rgba(93, 173, 226, 0.3);
+    }
+
+    .story-section::before {
+        content: '';
+        position: absolute;
+        left: 19px;
+        top: 50px;
+        bottom: -30px;
+        width: 2px;
+        background: linear-gradient(to bottom, var(--primary-blue), transparent);
+        opacity: 0.3;
+    }
+
+    .story-section:last-child::before {
+        display: none;
+    }
+
+    .story-title {
+        font-size: 1.8rem;
+        color: var(--dark-brown);
+        margin-bottom: 20px;
+        font-weight: bold;
+        line-height: 1.4;
+        text-align: left;
+    }
+
+    .story-content {
+        color: #666;
+        line-height: 1.8;
+        font-size: 1.1rem;
+        text-align: left;
+    }
+
+    .story-content p {
+        margin-bottom: 15px;
+    }
+
+    .question-examples {
+        background: var(--light-bg);
+        padding: 25px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 4px solid var(--primary-blue);
+    }
+
+    .question-examples h4 {
+        color: var(--dark-brown);
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+        text-align: left;
+    }
+
+    .question-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .question-list li {
+        padding: 8px 0;
+        padding-left: 25px;
+        position: relative;
+        color: #666;
+        font-style: italic;
+        text-align: left;
+    }
+
+    .question-list li:before {
+        content: '💭';
+        position: absolute;
+        left: 0;
+        top: 8px;
+    }
+
+    .emphasis-box {
+        background: linear-gradient(135deg, rgba(93, 173, 226, 0.1), rgba(82, 196, 26, 0.1));
+        padding: 30px;
+        border-radius: 20px;
+        margin: 30px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .emphasis-box::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+        animation: pulse-light 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse-light {
+        0%, 100% {
+            transform: scale(0.8);
+            opacity: 0.5;
+        }
+        50% {
+            transform: scale(1.2);
+            opacity: 0.8;
+        }
+    }
+
+    .emphasis-box h4 {
+        color: var(--dark-brown);
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+        position: relative;
+        z-index: 1;
+        text-align: left;
+    }
+
+    .emphasis-box p {
+        color: #666;
+        line-height: 1.8;
+        position: relative;
+        z-index: 1;
+        font-size: 1.1rem;
+        text-align: left;
+    }
+
+    .future-skills {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .skill-item {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+    }
+
+    .skill-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .skill-icon {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .skill-name {
+        color: var(--dark-brown);
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    /* Yononakaへの導線 */
+    .yononaka-connection {
+        background: linear-gradient(135deg, var(--accent-yellow), var(--secondary-orange));
+        color: white;
+        padding: 40px;
+        border-radius: 20px;
+        margin-top: 40px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(243, 156, 18, 0.3);
+    }
+
+    .yononaka-connection::before {
+        content: '💬';
+        position: absolute;
+        right: 30px;
+        bottom: -20px;
+        font-size: 100px;
+        opacity: 0.2;
+    }
+
+    .yononaka-connection h3 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        position: relative;
+        z-index: 1;
+        text-align: left;
+    }
+
+    .yononaka-connection p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        position: relative;
+        z-index: 1;
+        opacity: 0.95;
+        text-align: left;
+    }
+    
+    /* 差別化セクション */
+    .difference {
+        padding: 80px 0;
+        background: linear-gradient(135deg, #E8F5E9 0%, #E3F2FD 100%);
+        position: relative;
+    }
+    
+    .comparison {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 40px;
+        align-items: center;
+        margin-top: 60px;
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .comparison-item {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .comparison-item.traditional {
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .comparison-item.keepon {
+        box-shadow: 0 10px 40px rgba(93, 173, 226, 0.3);
+        transform: scale(1.05);
+        border: 3px solid var(--primary-blue);
+    }
+    
+    .comparison-item h3 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: var(--dark-brown);
+    }
+    
+    .comparison-item.keepon h3 {
+        color: var(--primary-blue);
+    }
+    
+    .comparison-list {
+        list-style: none;
+        text-align: left;
+    }
+    
+    .comparison-list li {
+        padding: 10px 0;
+        padding-left: 30px;
+        position: relative;
+        color: #666;
+        line-height: 1.6;
+    }
+    
+    .comparison-list li:before {
+        content: '✗';
+        position: absolute;
+        left: 0;
+        color: #E74C3C;
+        font-weight: bold;
+    }
+    
+    .keepon .comparison-list li:before {
+        content: '✓';
+        color: var(--accent-green);
+    }
+    
+    .comparison-divider {
+        width: auto;
+        min-width: 80px;
+        height: 60px;
+        background: white;
+        border-radius: 10px;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: var(--dark-brown);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 1;
+        border: 2px solid #eee;
+    }
+
+    .difference .container > p {
+        text-align: left;
+        font-size: 1.1rem;
+        color: #666;
+        line-height: 1.8;
+        max-width: 800px;
+        margin: 60px auto 0;
+    }
+    
+    /* ターゲットセクション */
+    .target {
+        padding: 80px 0;
+        background: white;
+    }
+    
+    .parent-question-container {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 30px;
+        justify-content: center;
+        padding: 0 20px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .parent-icon-wrapper {
+        flex-shrink: 0;
+        padding-top: 5px; 
+    }
+
+    .parent-face-icon {
+        font-size: 2.8rem; 
+        display: inline-block;
+        line-height: 1;
+    }
+
+    .speech-bubble {
+        position: relative;
+        background-color: var(--primary-blue);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 12px;
+        max-width: 480px; 
+        box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        flex-grow: 1;
+    }
+
+    .speech-bubble p {
+        font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+        font-weight: 600; 
+        line-height: 1.5;
+        margin: 0;
+        text-align: left;
+    }
+
+    .speech-bubble::before {
+        content: "";
+        position: absolute;
+        top: 18px;
+        left: -10px; 
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-right: 10px solid var(--primary-blue);
+    }
+    
+    .target .section-title {
+         margin-top: 1em;
+    }
+    .target .section-title:after {
+        bottom: -20px;
+    }
+
+    .target-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-top: 60px;
+    }
+    
+    .target-item {
+        text-align: center;
+        padding: 30px;
+        border-radius: 20px;
+        background: var(--light-bg);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .target-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .target-item:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(to right, var(--primary-blue), var(--accent-green));
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .target-item:hover:before {
+        transform: scaleX(1);
+    }
+    
+    .target-emoji {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        display: inline-block;
+        animation: bounce 2s infinite;
+        animation-delay: calc(var(--index) * 0.1s);
+    }
+    
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+        }
+        40% {
+            transform: translateY(-10px);
+        }
+        60% {
+            transform: translateY(-5px);
+        }
+    }
+    
+    .target-text {
+        font-size: 1rem;
+        color: #666;
+        line-height: 1.6;
+        text-align: left;
+    }
+    
+    .welcome-message {
+        text-align: left;
+        margin-top: 40px;
+        padding: 30px;
+        background: linear-gradient(135deg, rgba(93, 173, 226, 0.1), rgba(82, 196, 26, 0.1));
+        border-radius: 20px;
+        font-size: 1.2rem;
+        color: var(--dark-brown);
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    /* CLAFTセクション */
+    .claft {
+        padding: 100px 0;
+        background: linear-gradient(135deg, var(--primary-blue), #0097A7);
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .claft:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 200%;
+        height: 100%;
+        background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 30c11 0 20 9 20 20s-9 20-20 20-20-9-20-20 9-20 20-20z' fill='none' stroke='rgba(255,255,255,0.1)' stroke-width='2'/%3E%3C/svg%3E") repeat;
+        animation: slide 20s linear infinite;
+    }
+    
+    @keyframes slide {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(50%);
+        }
+    }
+    
+    .claft-content {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+    }
+    
+    .claft-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 10px 30px;
+        border-radius: 50px;
+        margin-bottom: 20px;
+        font-weight: bold;
+        backdrop-filter: blur(10px);
+    }
+    
+    .claft-title {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        font-weight: 900;
+    }
+    
+    .claft-description {
+        font-size: 1.2rem;
+        max-width: 800px;
+        margin: 0 auto 40px;
+        line-height: 1.8;
+        opacity: 0.9;
+        text-align: left;
+    }
+    
+    .claft-features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 25px;
+        margin-top: 40px;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .claft-feature {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 30px;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .claft-feature:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-5px);
+    }
+    
+    .claft-feature-icon {
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+    
+    .claft-feature-title {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+        text-align: left;
+    }
+
+    .claft-feature p {
+        text-align: left;
+        opacity: 0.9;
+    }
+
+    .claft-content > p:last-child {
+        text-align: center;
+        margin-top: 40px;
+        opacity: 0.9;
+    }
+
+    .claft-link, .claft-link-bottom {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .claft-detail-button {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    .claft-detail-button:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 納得解セクション */
+    .consensus-solution {
+        padding: 80px 0;
+        background: linear-gradient(135deg, #FFF8E1 0%, #E8F5E9 100%);
+        position: relative;
+    }
+
+    .consensus-content {
+        max-width: 900px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .modern-challenge, .solution-approach {
+        margin: 60px 0;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 20px;
+        text-align: left;
+        backdrop-filter: blur(10px);
+    }
+
+    .modern-challenge h3, .solution-approach h3 {
+        color: var(--dark-brown);
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .modern-challenge p, .solution-approach p {
+        color: var(--gray-text);
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .solution-approach strong {
+        color: var(--primary-blue);
+        font-size: 1.2rem;
+    }
+
+    .training-method {
+        margin-top: 30px;
+        padding: 30px;
+        background: var(--light-bg);
+        border-radius: 15px;
+        border-left: 5px solid var(--primary-blue);
+    }
+
+    .training-method h4 {
+        color: var(--dark-brown);
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .training-method p {
+        color: var(--gray-text);
+        line-height: 1.8;
+        text-align: center;
+    }
+
+    /* 最終CTAセクション */
+    .final-cta-section {
+        padding: 100px 0;
+        background: linear-gradient(135deg, var(--primary-blue), var(--secondary-orange));
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .final-cta-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        animation: pulse-light 6s ease-in-out infinite;
+    }
+
+    .final-cta-content {
+        position: relative;
+        z-index: 1;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .final-cta-content h2 {
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        font-weight: 900;
+    }
+
+    .final-cta-content p {
+        font-size: 1.2rem;
+        line-height: 1.8;
+        margin-bottom: 40px;
+        opacity: 0.95;
+    }
+
+    .final-cta-button {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.95);
+        color: var(--primary-blue);
+        padding: 20px 50px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.3rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .final-cta-button:hover {
+        background: white;
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* CTAセクション */
+    .final-cta {
+        padding: 100px 0;
+        background: linear-gradient(135deg, #FFF3E0 0%, #E3F2FD 100%);
+        text-align: center;
+        position: relative;
+    }
+    
+    .final-cta-content h2 {
+        font-size: 2.5rem;
+        color: var(--dark-brown);
+        margin-bottom: 20px;
+    }
+    
+    .final-cta-content p {
+        font-size: 1.2rem;
+        color: #666;
+        max-width: 600px;
+        margin: 0 auto 40px;
+        line-height: 1.8;
+        text-align: left;
+    }
+    
+    .cta-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .cta-button {
+        padding: 20px 50px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .cta-button.primary {
+        background: linear-gradient(135deg, var(--secondary-orange), var(--accent-yellow));
+        color: white;
+        box-shadow: 0 5px 20px rgba(243, 156, 18, 0.3);
+    }
+    
+    .cta-button.secondary {
+        background: white;
+        color: var(--primary-blue);
+        border: 2px solid var(--primary-blue);
+    }
+    
+    .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* アクセス情報 */
+    .access-info {
+        margin-top: 60px;
+        padding: 40px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: left;
+    }
+    
+    .access-info h3 {
+        color: var(--dark-brown);
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+    }
+    
+    .access-info p {
+        color: #666;
+        line-height: 1.8;
+        margin-bottom: 10px;
+    }
+    
+    .access-info .tel {
+        font-size: 1.5rem;
+        color: var(--primary-blue);
+        font-weight: bold;
+        margin-top: 20px;
+    }
+    
+    /* フッター */
+    footer {
+        background: var(--dark-brown);
+        color: white;
+        padding: 40px 0;
+        text-align: center;
+    }
+    
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    .footer-logo {
+        width: 120px;
+        margin-bottom: 20px;
+        filter: brightness(0) invert(1);
+    }
+    
+    .footer-links {
+        display: flex;
+        gap: 30px;
+        justify-content: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .footer-links a {
+        color: white;
+        text-decoration: none;
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+        opacity: 1;
+    }
+    
+    .copyright {
+        opacity: 0.6;
+        font-size: 0.9rem;
+    }
+    
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+        }
+        
+        .concept-content {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+        
+        .comparison {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .comparison-divider {
+            margin: 20px auto;
+        }
+        
+        .comparison-item.keepon {
+            transform: none;
+        }
+        
+        .pillars-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .cta-group {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .cta-primary {
+            text-align: center;
+        }
+
+        .parent-question-container {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .speech-bubble {
+            max-width: 90%;
+        }
+        .speech-bubble::before {
+            left: 50%;
+            transform: translateX(-50%);
+            top: -10px;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid var(--primary-blue);
+            border-top: 0;
+        }
+        .parent-icon-wrapper {
+            margin-bottom: 10px;
+            padding-top: 0;
+        }
+
+        .story-section {
+            padding-left: 50px;
+        }
+
+        .story-marker {
+            width: 35px;
+            height: 35px;
+            font-size: 1.2rem;
+        }
+
+        .story-title {
+            font-size: 1.5rem;
+        }
+
+        .future-skills {
+            grid-template-columns: 1fr;
+        }
+
+        .yononaka-connection {
+            padding: 30px 20px;
+        }
+
+        .yononaka-connection::before {
+            font-size: 60px;
+            right: 20px;
+            bottom: -10px;
+        }
+
+        .hero-video iframe {
+            height: 250px;
+        }
+
+        .activities-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .trends-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .claft-features {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .final-cta-content h2 {
+            font-size: 2rem;
+        }
+
+        .chart {
+            flex-direction: column;
+            height: auto;
+            gap: 20px;
+        }
+
+        .chart-bar {
+            width: 80%;
+            height: 60px !important;
+        }
+
+        .data-image, .trend-image {
+            max-width: 100%;
+        }
+
+        .event-image {
+            max-width: 100%;
+        }
+
+        .problem-statement, .solution-statement {
+            margin: 30px 0;
+            padding: 25px;
+        }
+
+        .philosophy-statement {
+            margin: 30px 0;
+            padding: 25px;
+        }
+
+        .education-challenge, .social-needs, .activities {
+            padding: 40px 0;
+        }
+    }
+    
+    /* スクロールアニメーション */
+    .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease;
+    }
+    
+    .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    /* ローディングアニメーション */
+    .loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease;
+    }
+    
+    .loader.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    .loader-content {
+        text-align: center;
+    }
+    
+    .loader-tree {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 20px;
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+</style>
+</head>
+<body>
+
+<!-- ヒーローセクション -->
+<section class="hero" data-aos="fade-in" data-aos-duration="1000">
+    <div class="floating-shapes">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+        <div class="shape shape3"></div>
+        <div class="shape shape4"></div>
+        <div class="shape shape5"></div>
+    </div>
+    <div class="hero-container">
+        <div class="hero-content">
+            <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200" data-aos-duration="800">
+                ロボットプログラミングの知識が身につく教室<br>
+                <span class="emphasis-text">だけではありません！</span>
+            </p>
+            <h1 class="hero-title" data-aos="fade-up" data-aos-delay="400" data-aos-duration="800">
+                キープオンスクールは<br>
+                ロボットプログラミングをきっかけに、<br>
+                自分で考え･対話し･行動する力を育てる居場所です。
+            </h1>
+            <div class="hero-video" data-aos="zoom-in" data-aos-delay="600" data-aos-duration="800">
+                <iframe src="https://www.youtube.com/embed/VpLB6bUaYEo" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 教育課題セクション -->
+<section class="education-challenge">
+    <div class="container">
+        <div class="challenge-content">
+            <div class="challenge-text" data-aos="fade-up" data-aos-delay="200" data-aos-duration="800">
+                <p>カリキュラムに沿ってつくるだけでなく、<br>
+                自分のアイデアでオリジナル作品をつくり、発表することを重視しています。<br><br>
+                なぜなら、社会に出たときに——<br>
+                <strong>自分の意見を伝え、他者と対話する力が求められるからです。</strong></p>
+            </div>
+            
+            <div class="problem-statement" data-aos="fade-right" data-aos-delay="400" data-aos-duration="800">
+                <p>多くの学校や学習塾では、テストの点数を上げるために「正解を暗記する」勉強に偏りがち。<br>
+                その結果、「自分の意見をもつ」「自分の言葉で話す」といった経験が不足し、<br>
+                社会に出てから戸惑う若者が少なくありません。</p>
+                
+                <div class="data-visualization" data-aos="zoom-in" data-aos-delay="600" data-aos-duration="800">
+                    <img src="data1.png" alt="教育における課題データ" class="data-image" data-tilt data-tilt-scale="1.05" data-tilt-max="10">
+                </div>
+            </div>
+
+            <div class="solution-statement" data-aos="fade-left" data-aos-delay="800" data-aos-duration="800">
+                <h3>私たちはこの現状を変えたい。</h3>
+                <p>だからこそ、発表会やワークショップを定期開催し、<br>
+                異年齢の子どもたちがつながる実践の場をたくさん用意しています。</p>
+                
+                <div class="event-gallery" data-aos="fade-up" data-aos-delay="1000" data-aos-duration="800">
+                    <div class="single-event-image">
+                        <img src="ibent.png" alt="イベントや発表会の様子" class="event-image" data-tilt data-tilt-scale="1.05" data-tilt-max="10" data-aos="zoom-in" data-aos-delay="1200">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 社会ニーズセクション -->
+<section class="social-needs">
+    <div class="container">
+        <div class="needs-content">
+            <div class="needs-text" data-aos="fade-up" data-aos-delay="200" data-aos-duration="800">
+                <p>現代の大学入試でも「総合型選抜」という自己表現やコミュニケーションを評価する入試が増えていますし、<br>
+                企業もコミュニケーションや主体性が高い人材を求めています。</p>
+            </div>
+            
+            <div class="trends-data" data-aos="fade-up" data-aos-delay="400" data-aos-duration="800">
+                <img src="data2.png" alt="教育・就職トレンドの変化" class="trend-image" data-aos="zoom-in" data-aos-delay="600" data-tilt data-tilt-scale="1.02" data-tilt-max="5">
+            </div>
+
+            <div class="philosophy-statement">
+                <h3>だからキープオンスクールでは</h3>
+                <p><strong>偏差値アップ支援ではなく、「自分はどう生きていくか」を考えるきっかけを提供します。</strong><br>
+                一人ひとりが将来を見据え、自分らしいキャリアを創っていくために・・・</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 活動紹介セクション -->
+<section class="activities">
+    <div class="container">
+        <h2 class="section-title" data-aos="fade-up" data-aos-duration="800">好奇心をくすぐる<br>さまざまな体験ができます！</h2>
+        <div class="activities-grid">
+            <div class="activity-card" onclick="openActivityModal('yononaka')" data-aos="slide-up" data-aos-delay="200" data-tilt data-tilt-scale="1.05" data-tilt-max="10">
+                <div class="activity-header activity-header1">
+                    <div class="activity-icon">💬</div>
+                    <h3 class="activity-title">Yononaka</h3>
+                    <p class="activity-subtitle">正解のない問いに意見共有するオンラインのワーク</p>
+                </div>
+                <div class="activity-preview">
+                    <p>異年齢の仲間と一緒に、人生や社会について深く考える対話の時間です。</p>
+                </div>
+            </div>
+
+            <div class="activity-card" onclick="openActivityModal('circle')" data-aos="slide-up" data-aos-delay="300" data-tilt data-tilt-scale="1.05" data-tilt-max="10">
+                <div class="activity-header activity-header2">
+                    <div class="activity-icon">🎨</div>
+                    <h3 class="activity-title">サークル活動</h3>
+                    <p class="activity-subtitle">アート・ゲーム・ものづくりなど好きを深める活動</p>
+                </div>
+                <div class="activity-preview">
+                    <p>自分の興味・関心を突き詰めて、好きなことをとことん追求できます。</p>
+                </div>
+            </div>
+
+            <div class="activity-card" onclick="openActivityModal('minecraft')" data-aos="slide-up" data-aos-delay="400" data-tilt data-tilt-scale="1.05" data-tilt-max="10">
+                <div class="activity-header activity-header3">
+                    <div class="activity-icon">🌏</div>
+                    <h3 class="activity-title">マイクラSDGs</h3>
+                    <p class="activity-subtitle">SDGsを学びながら、マイクラで想像力を発揮！</p>
+                </div>
+                <div class="activity-preview">
+                    <p>楽しく遊びながら、地球の未来について考え、行動する力を育みます。</p>
+                </div>
+            </div>
+
+            <div class="activity-card" onclick="openActivityModal('career')" data-aos="slide-up" data-aos-delay="500" data-tilt data-tilt-scale="1.05" data-tilt-max="10">
+                <div class="activity-header activity-header4">
+                    <div class="activity-icon">🧭</div>
+                    <h3 class="activity-title">キャリアコース</h3>
+                    <p class="activity-subtitle">自ら課題を見つけ、解決策を発表するPBL型学習</p>
+                </div>
+                <div class="activity-preview">
+                    <p>自分で問いを立て、調べ、考え、発表する力を身につけます。</p>
+                </div>
+            </div>
+
+            <div class="activity-card" onclick="openActivityModal('events')" data-aos="slide-up" data-aos-delay="600" data-tilt data-tilt-scale="1.05" data-tilt-max="10">
+                <div class="activity-header activity-header5">
+                    <div class="activity-icon">👥</div>
+                    <h3 class="activity-title">仲間とつながるイベント</h3>
+                    <p class="activity-subtitle">スクールフェスタやキャリアワークショップなど</p>
+                </div>
+                <div class="activity-preview">
+                    <p>イベントを企画する側の経験もできます！人と関わる経験がたくさん！</p>
+                </div>
+            </div>
+
+            <div class="activity-card more-activities" data-aos="slide-up" data-aos-delay="700" data-tilt data-tilt-scale="1.05" data-tilt-max="10">
+                <div class="activity-header activity-header6">
+                    <div class="activity-icon">✨</div>
+                    <h3 class="activity-title">・・・etc</h3>
+                    <p class="activity-subtitle">他にもたくさんの活動があります</p>
+                </div>
+                <div class="activity-preview">
+                    <p>子どもたちの興味に合わせて、新しい活動も随時追加しています。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section" data-aos="fade-up" data-aos-delay="800" data-aos-duration="800">
+            <h3 data-aos="pulse" data-aos-delay="1000">【無料体験受付中】</h3>
+            <p data-aos="fade-up" data-aos-delay="1100">キープオンスクールは、ただの習い事ではありません。<br>
+            子どもたちが自分で考え、行動する力を育みながら、安心して自分らしくいられる「居場所」です。<br>
+            まずは、無料体験でその楽しさを感じてみてください！</p>
+            <a href="https://www.keeponlearning.fun/contact" class="cta-button cta-button-primary confetti-trigger" data-aos="zoom-in" data-aos-delay="1200">
+                👉 無料体験のお申し込みはこちら
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- CLAFTセクション -->
+<section class="claft">
+    <div class="container">
+        <div class="claft-content">
+            <div class="claft-badge" data-aos="fade-down" data-aos-duration="800">キープオンスクールの教育理念</div>
+            <h2 class="claft-title" data-aos="fade-up" data-aos-delay="200" data-aos-duration="800">CLAFT</h2>
+            <p class="claft-description" data-aos="fade-up" data-aos-delay="400" data-aos-duration="800">
+                Creative（創造性）と Communication（対話力）を軸にした Learning（学び）を通じて、<br>
+                Activeness（主体性）と Flexibility（柔軟性）を育み、Try（挑戦）する力を身につける。<br>
+                そんな人は、どこに行っても、何があっても大丈夫。<br>
+                私たちはその姿を、CLAFTという言葉に込めました。
+            </p>
+            
+            <div class="claft-features">
+                <div class="claft-feature" data-aos="flip-up" data-aos-delay="600" data-tilt data-tilt-scale="1.05" data-tilt-max="8">
+                    <div class="claft-feature-icon">🎨</div>
+                    <h3 class="claft-feature-title">Creative<br>（創造性）</h3>
+                    <p>自分なりのアイデアで問題解決</p>
+                </div>
+                <div class="claft-feature" data-aos="flip-up" data-aos-delay="700" data-tilt data-tilt-scale="1.05" data-tilt-max="8">
+                    <div class="claft-feature-icon">💬</div>
+                    <h3 class="claft-feature-title">Communication<br>（対話力）</h3>
+                    <p>異なる意見を尊重し合う対話</p>
+                </div>
+                <div class="claft-feature" data-aos="flip-up" data-aos-delay="800" data-tilt data-tilt-scale="1.05" data-tilt-max="8">
+                    <div class="claft-feature-icon">📚</div>
+                    <h3 class="claft-feature-title">Learning<br>（学び）</h3>
+                    <p>体験を通した深い理解</p>
+                </div>
+                <div class="claft-feature" data-aos="flip-up" data-aos-delay="900" data-tilt data-tilt-scale="1.05" data-tilt-max="8">
+                    <div class="claft-feature-icon">⚡</div>
+                    <h3 class="claft-feature-title">Activeness<br>（主体性）</h3>
+                    <p>自ら考え、行動する力</p>
+                </div>
+                <div class="claft-feature" data-aos="flip-up" data-aos-delay="1000" data-tilt data-tilt-scale="1.05" data-tilt-max="8">
+                    <div class="claft-feature-icon">🌊</div>
+                    <h3 class="claft-feature-title">Flexibility<br>（柔軟性）</h3>
+                    <p>変化に適応する力</p>
+                </div>
+                <div class="claft-feature" data-aos="flip-up" data-aos-delay="1100" data-tilt data-tilt-scale="1.05" data-tilt-max="8">
+                    <div class="claft-feature-icon">🚀</div>
+                    <h3 class="claft-feature-title">Try<br>（挑戦）</h3>
+                    <p>失敗を恐れず挑戦する勇気</p>
+                </div>
+            </div>
+            
+            <div class="claft-link" data-aos="fade-up" data-aos-delay="1200" data-aos-duration="800">
+                <a href="https://claft-keepon.studio.site/" target="_blank" class="claft-detail-button confetti-trigger">
+                    CLAFTの詳細ページはこちら →
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 納得解セクション -->
+<section class="consensus-solution">
+    <div class="container">
+        <div class="consensus-content fade-in">
+        
+            <div class="modern-challenge">
+                <p>今の子どもたちは、私たちの子ども時代とはまったく違う世界を生きています。<br>
+                生まれたときからスマートフォンやデジタル機器が身近にあり、<br>
+                情報はいつでも手のひらの中に。</p>
+                
+                <p>便利な反面、検索すれば「正しそうな情報」が次々に出てきて、<br>
+                何を信じればいいのか、どれを選べばいいのか、迷ってしまうことも少なくありません。</p>
+            </div>
+            
+            <div class="solution-approach">
+                <h3>だからこそ、必要なのは「自分の納得解」</h3>
+                <p>今の時代に求められるのは、<br>
+                誰かの「正解っぽい答え」に頼ることではなく、<br>
+                <strong>自分の価値観や判断軸をもって考えることです。</strong></p>
+                
+                <div class="training-method">
+                    <h4>CLAFTでは、</h4>
+                    <p>正解がひとつでないお題に対して、<br>
+                    自分の意見を持ち、それを他者に共有するトレーニングを行います。<br>
+                    対話を通して、自分なりの"納得解"を導き出す力。<br>
+                    それこそが、情報があふれる時代を生き抜くための土台になると私たちは考えています。</p>
+                </div>
+            </div>
+            
+            <div class="claft-link-bottom">
+                <a href="https://claft-keepon.studio.site/" target="_blank" class="claft-detail-button">
+                    CLAFTの詳細ページはこちら →
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 最終CTAセクション -->
+<section class="final-cta-section">
+    <div class="container">
+        <div class="final-cta-content">
+            <h2 data-aos="fade-down" data-aos-duration="800">【無料体験受付中】</h2>
+            <p data-aos="fade-up" data-aos-delay="200" data-aos-duration="800">キープオンスクールは、ただの習い事ではありません。<br>
+            子どもたちが自分で考え、行動する力を育みながら、安心して自分らしくいられる「居場所」です。<br>
+            まずは、無料体験でその楽しさを感じてみてください！</p>
+            <a href="https://www.keeponlearning.fun/contact" class="final-cta-button confetti-trigger" data-aos="bounce" data-aos-delay="400" data-aos-duration="1000">
+                👉 無料体験のお申し込みはこちら
+            </a>
+        </div>
+    </div>
+</section>
+
+<script>
+    // ローディング画面制御
+    window.addEventListener('load', () => {
+        const loader = document.getElementById('loader');
+        if (loader) {
+            // 0.5秒後に非表示クラスを追加して、アニメーションを見せる
+            setTimeout(() => {
+                loader.classList.add('hidden');
+            }, 500);
+        }
+    });
+
+    // 3つの柱 アコーディオン機能
+    function togglePillar(element) {
+        const wasActive = element.classList.contains('active');
+        
+        // すべてのカードから 'active' クラスを削除
+        document.querySelectorAll('.pillar-card.active').forEach(card => {
+            card.classList.remove('active');
+        });
+
+        // もしクリックした要素が元々アクティブでなかった場合、'active' クラスを追加
+        if (!wasActive) {
+            element.classList.add('active');
+        }
+    }
+
+    // 活動カードモーダル機能（簡易実装）
+    function openActivityModal(activityType) {
+        const messages = {
+            'yononaka': 'Yononakaについて詳しく知りたい方は、お気軽にお問い合わせください。',
+            'circle': 'サークル活動について詳しく知りたい方は、お気軽にお問い合わせください。',
+            'minecraft': 'マイクラSDGsについて詳しく知りたい方は、お気軽にお問い合わせください。',
+            'career': 'キャリアコースについて詳しく知りたい方は、お気軽にお問い合わせください。',
+            'events': 'イベントについて詳しく知りたい方は、お気軽にお問い合わせください。'
+        };
+        
+        alert(messages[activityType] || 'この活動について詳しく知りたい方は、お気軽にお問い合わせください。');
+    }
+
+    // ライブラリの初期化とアニメーション制御
+    document.addEventListener('DOMContentLoaded', () => {
+        // AOS（Animate On Scroll）の初期化
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
+
+        // VanillaTiltの初期化
+        VanillaTilt.init(document.querySelectorAll("[data-tilt]"));
+
+        // CountUpアニメーションの初期化
+        const initCountUp = () => {
+            const countupElements = document.querySelectorAll('.countup');
+            const countupObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const element = entry.target;
+                        const target = parseInt(element.dataset.target);
+                        const countUp = new CountUp(element, target, {
+                            duration: 2.5,
+                            useEasing: true,
+                            useGrouping: false
+                        });
+                        countUp.start();
+                        countupObserver.unobserve(element);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            countupElements.forEach(el => countupObserver.observe(el));
+        };
+
+        // CountUpの初期化
+        initCountUp();
+
+        // 紙吹雪エフェクト
+        const addConfettiEffect = () => {
+            document.querySelectorAll('.confetti-trigger').forEach(trigger => {
+                trigger.addEventListener('click', (e) => {
+                    // リンククリック前に紙吹雪を表示
+                    e.preventDefault();
+                    
+                    // 紙吹雪の設定
+                    const colors = ['#00BCD4', '#FF9800', '#4CAF50', '#FFC107', '#FF6B6B'];
+                    
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: colors
+                    });
+
+                    // より豪華な紙吹雪
+                    setTimeout(() => {
+                        confetti({
+                            particleCount: 50,
+                            angle: 60,
+                            spread: 55,
+                            origin: { x: 0, y: 0.6 },
+                            colors: colors
+                        });
+                    }, 200);
+
+                    setTimeout(() => {
+                        confetti({
+                            particleCount: 50,
+                            angle: 120,
+                            spread: 55,
+                            origin: { x: 1, y: 0.6 },
+                            colors: colors
+                        });
+                    }, 400);
+
+                    // 1秒後にリンクに移動
+                    setTimeout(() => {
+                        window.open(e.target.href, '_blank');
+                    }, 1000);
+                });
+            });
+        };
+
+        // 紙吹雪エフェクトの初期化
+        addConfettiEffect();
+
+        // 既存のフェードインアニメーション（AOSがサポートしていない場合のフォールバック）
+        const fadeInElements = document.querySelectorAll('.fade-in');
+        
+        if ("IntersectionObserver" in window && fadeInElements.length > 0) {
+            const fadeInObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            fadeInElements.forEach(el => fadeInObserver.observe(el));
+        } else {
+            fadeInElements.forEach(el => el.classList.add('visible'));
+        }
+    });
+
+    // ヘッダーの表示・非表示制御
+    let lastScrollTop = 0;
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        header.style.top = (scrollTop > lastScrollTop && scrollTop > header.offsetHeight) ? `-${header.offsetHeight}px` : '0';
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    });
+
+    // ロゴクリックでトップにスクロール
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+</script>
+
+</body>
+</html>
